@@ -9,9 +9,7 @@ sudo dhclient eth0
 
 sudo apt update && sudo apt upgrade -y
 
-sudo apt install firefox-esr
-
-sudo apt install dnsmasq
+sudo apt update && sudo apt install firefox-esr dnsmasq ublock-origin
 
 sudo nano /etc/dnsmasq.conf
 
@@ -41,4 +39,6 @@ no-poll
 ##########################################
 
 sudo systemctl restart dnsmasq
+
+sudo fallocate -l 1G /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
 
