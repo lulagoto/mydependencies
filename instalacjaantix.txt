@@ -1,0 +1,41 @@
+sudo antix-installer
+
+po instalacjii
+
+sudo dhclient eth0
+
+sudo apt update && sudo apt upgrade -y
+
+sudo apt install firefox-esr
+
+sudo apt install dnsmasq
+
+sudo nano /etc/dnsmasq.conf
+
+##########################################
+
+no-resolv             
+server=8.8.8.8        
+server=8.8.4.4          
+cache-size=10000        
+no-negcache             
+local-ttl=300         
+
+address=/gemius.pl/0.0.0.0
+address=/hit.gemius.pl/0.0.0.0
+address=/adocean.pl/0.0.0.0
+address=/ad.adocean.pl/0.0.0.0
+address=/ad.onet.pl/0.0.0.0
+address=/ad.wp.pl/0.0.0.0
+address=/ceneo.click/0.0.0.0
+address=/doubleclick.net/0.0.0.0
+address=/google-analytics.com/0.0.0.0
+
+strict-order          
+all-servers          
+no-poll                 
+
+##########################################
+
+sudo systemctl restart dnsmasq
+
