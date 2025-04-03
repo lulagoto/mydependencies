@@ -1,15 +1,56 @@
+### sprawdzanie CPU
+
 grep pae /proc/cpuinfo
 
 
+### Instaler
+
 sudo antix-installer
 
-po instalacjii
+SWAP 2GB
+
+
+### internet
 
 sudo dhclient eth0
 
+
+### KOINFIGURACJA SWAP
+
+sudo nano /etc/fstab
+
+/dev/sdaX none swap sw 0 0
+
+sudo swapon --show
+
+free -h
+
+
+### Optymalizacja SWAPU
+
+echo "vm.swappiness=70" | sudo tee -a /etc/sysctl.conf
+echo "vm.vfs_cache_pressure=50" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
+
+#### MIRRORLISTY
+
+sudo nano /etc/apt/sources.list
+
+deb http://ftp.icm.edu.pl/pub/Linux/Debian/debian bookworm main contrib non-free
+deb http://ftp.icm.edu.pl/pub/Linux/Debian/debian bookworm-updates main contrib non-free
+deb http://ftp.icm.edu.pl/pub/Linux/Debian/debian-security bookworm-security main contrib non-free
+deb http://ftp.icm.edu.pl/pub/Linux/dist/antix-workspace/antix/bookworm/ bookworm main contrib non-free nosystemd
+
+
+### update upgrade
+
 sudo apt update && sudo apt upgrade -y
 
-sudo apt update && sudo apt install firefox-esr dnsmasq ublock-origin
+sudo systemctl disable bluetooth 2>/dev/null
+
+### doneta
+sudo apt update && sudo apt install firefox-esr dnsmasq ublock-origin zram-tools sensors
 
 sudo nano /etc/dnsmasq.conf
 
@@ -41,4 +82,21 @@ no-poll
 sudo systemctl restart dnsmasq
 
 sudo fallocate -l 1G /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
+
+sudo apt install zram-tools 
+
+
+########### FIREFOX
+
+about:config
+
+gfx.webrender.all → false 
+layers.acceleration.force-enabled → true
+browser.tabs.unloadOnLowMemory → true
+
+
+
+
+
+
 
