@@ -21,6 +21,8 @@ sudo nano /etc/fstab
 
 /dev/sdaX none swap sw 0 0
 
+--------
+
 sudo swapon --show
 
 free -h
@@ -36,26 +38,68 @@ sudo sysctl -p
 #### MIRRORLISTY
 
 sudo nano /etc/apt/sources.list
-
+========
 deb http://ftp.icm.edu.pl/pub/Linux/Debian/debian bookworm main contrib non-free
 deb http://ftp.icm.edu.pl/pub/Linux/Debian/debian bookworm-updates main contrib non-free
 deb http://ftp.icm.edu.pl/pub/Linux/Debian/debian-security bookworm-security main contrib non-free
 deb http://ftp.icm.edu.pl/pub/Linux/dist/antix-workspace/antix/bookworm/ bookworm main contrib non-free nosystemd
-
+========
 
 ### update upgrade
 
 sudo apt update && sudo apt upgrade -y
+sudo systemctl stop bluetooth anacron avahi-daemon cups-browsed
+sudo systemctl disable bluetooth anacron avahi-daemon cups-browsed
 
-sudo systemctl disable bluetooth 2>/dev/null
+
+#### USPRAWNIENIA
+
+sudo nano ~/.icewm/preferences
+========
+TaskBarClockLeds=0
+OpaqueMove=0
+MenuDelayMilliseconds=100
+ShowWinMenuIcons=0 
+========
+
+--------
+
+sudo nano /etc/modprobe.d/blacklist.conf
+========
+blacklist bluetooth
+blacklist pcspkr
+blacklist joydev
+========
 
 ### doneta
-sudo apt update && sudo apt install firefox-esr dnsmasq ublock-origin zram-tools sensors
+sudo apt update && sudo apt install nano firefox-esr dnsmasq ublock-origin zram-tools sensors
+
+
+### KONFIGURACJA ZRAMU 
+
+sudo nano /etc/default/zramswap
+
+========
+SIZE=512M  
+PRIORITY=100    
+ALGORITHM=lz4  
+========
+
+======
+sudo systemctl restart zramswap
+sudo cat /proc/swaps
+======
+
+echo "vm.page-cluster=0" | sudo tee -a /etc/sysctl.conf
+echo "vm.swappiness=70" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
+
+### dnsmasq
 
 sudo nano /etc/dnsmasq.conf
 
-##########################################
-
+========
 no-resolv             
 server=8.8.8.8        
 server=8.8.4.4          
@@ -76,27 +120,17 @@ address=/google-analytics.com/0.0.0.0
 strict-order          
 all-servers          
 no-poll                 
-
-##########################################
+========
 
 sudo systemctl restart dnsmasq
 
-sudo fallocate -l 1G /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
 
-sudo apt install zram-tools 
-
-
-########### FIREFOX
+### FIREFOX
 
 about:config
-
+========
 gfx.webrender.all → false 
 layers.acceleration.force-enabled → true
 browser.tabs.unloadOnLowMemory → true
-
-
-
-
-
-
+========
 
