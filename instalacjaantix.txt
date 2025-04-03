@@ -78,21 +78,33 @@ sudo apt update && sudo apt install nano firefox-esr dnsmasq ublock-origin zram-
 ### KONFIGURACJA ZRAMU 
 
 sudo nano /etc/default/zramswap
-
 ========
 SIZE=512M  
 PRIORITY=100    
 ALGORITHM=lz4  
 ========
 
-======
+--------
+
 sudo systemctl restart zramswap
 sudo cat /proc/swaps
-======
+
+--------
 
 echo "vm.page-cluster=0" | sudo tee -a /etc/sysctl.conf
-echo "vm.swappiness=70" | sudo tee -a /etc/sysctl.conf
+echo "vm.swappiness=60" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
+
+--------
+
+>>>>>>>>>>>>>>>>>>>>  PRZED exit 0
+sudo nano /etc/rc.local
+========
+echo lz4 > /sys/block/zram0/comp_algorithm
+echo 524288000 > /sys/block/zram0/disksize  # 512MB w bajtach
+mkswap /dev/zram0
+swapon -p 100 /dev/zram0
+========
 
 
 ### dnsmasq
@@ -133,4 +145,3 @@ gfx.webrender.all → false
 layers.acceleration.force-enabled → true
 browser.tabs.unloadOnLowMemory → true
 ========
-
